@@ -1,5 +1,5 @@
 <Alloy>
 	<Window class="container" onPostlayout="windowPostlayout">
-		<WebView id="visualizerWebView" height="50%" width="90%"></WebView>
+		<WebView id="visualizerWebView" height="90%"></WebView>
 	</Window>
 </Alloy>
