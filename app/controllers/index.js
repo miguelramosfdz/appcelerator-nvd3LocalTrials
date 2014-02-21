@@ -1,5 +1,6 @@
-function doClick(e) {
-    alert($.label.text);
+// view lifecycles
+function windowPostlayout(e) {
+	$.visualizerWebView.url = "http://www.google.com";
 }
 
 $.index.open();
