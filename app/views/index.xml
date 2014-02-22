@@ -1,5 +1,6 @@
 <Alloy>
-	<Window class="container" onPostlayout="windowPostlayout">
-		<WebView id="visualizerWebView" onLoad='webviewLoaded' height="90%"></WebView>
+	<Window class="container" onPostlayout="windowPostlayout" layout="vertical">
+		<WebView id="visualizerWebView" onLoad='webviewLoaded' height="50%"></WebView>
+		<Widget src="ProteusVisualization" id="stepsVisualization" height="50%"></Widget>
 	</Window>
 </Alloy>

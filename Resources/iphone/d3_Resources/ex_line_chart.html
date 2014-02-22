@@ -11,17 +11,13 @@
 <body>
 
 <div id="chart">
-	<svg style='height:300px' > </svg>
+	<svg style='height:100%' > </svg>
 </div>
 
 
 <!-- charting code -->
 <script>
-	document.write("loaded JS in webview");
-
-	document.write("chart it up");
 	
-	Ti.App.fireEvent('fromWebview');
 Ti.App.addEventListener('fromIndex', function(e) {
 	//chart setup and choosing
 	nv.addGraph(function() {
@@ -29,7 +25,7 @@ Ti.App.addEventListener('fromIndex', function(e) {
 			.margin({left:10})
 			.useInteractiveGuideline(true)
 			.transitionDuration(350)
-			.showLegend(true)
+			.showLegend(false)
 			.showYAxis(true)
 			.showXAxis(true)
 			.tooltips(false)

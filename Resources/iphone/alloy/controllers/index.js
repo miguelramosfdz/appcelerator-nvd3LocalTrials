@@ -56,16 +56,23 @@ function Controller() {
     var __defers = {};
     $.__views.index = Ti.UI.createWindow({
         backgroundColor: "white",
+        layout: "vertical",
         id: "index"
     });
     $.__views.index && $.addTopLevelView($.__views.index);
     windowPostlayout ? $.__views.index.addEventListener("postlayout", windowPostlayout) : __defers["$.__views.index!postlayout!windowPostlayout"] = true;
     $.__views.visualizerWebView = Ti.UI.createWebView({
         id: "visualizerWebView",
-        height: "90%"
+        height: "50%"
     });
     $.__views.index.add($.__views.visualizerWebView);
     webviewLoaded ? $.__views.visualizerWebView.addEventListener("load", webviewLoaded) : __defers["$.__views.visualizerWebView!load!webviewLoaded"] = true;
+    $.__views.stepsVisualization = Alloy.createWidget("ProteusVisualization", "widget", {
+        id: "stepsVisualization",
+        height: "50%",
+        __parentSymbol: $.__views.index
+    });
+    $.__views.stepsVisualization.setParent($.__views.index);
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.App.addEventListener("chartItUp", function() {
