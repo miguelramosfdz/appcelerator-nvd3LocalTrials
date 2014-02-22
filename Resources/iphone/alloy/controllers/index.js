@@ -5,8 +5,46 @@ function Controller() {
         var visualizationPath = newFile.nativePath;
         $.visualizerWebView.url = visualizationPath;
     }
+    function sinAndCos() {
+        var sin = [], sin2 = [], cos = [];
+        for (var i = 0; 100 > i; i++) {
+            sin.push({
+                x: i,
+                y: Math.sin(i / 10)
+            });
+            sin2.push({
+                x: i,
+                y: .25 * Math.sin(i / 10) + .5
+            });
+            cos.push({
+                x: i,
+                y: .5 * Math.cos(i / 10)
+            });
+        }
+        return [ {
+            values: sin,
+            key: "Sine Wave",
+            color: "#D2D9BA"
+        }, {
+            values: sin2,
+            key: "Another sine wave",
+            color: "#95BDA6"
+        }, {
+            values: cos,
+            key: "Cosine wave",
+            color: "#F5E687"
+        } ];
+    }
     function windowPostlayout() {
         loadVisualization();
+        Titanium.App.fireEvent("chartItUp", {});
+        console.log("titanium event fired in window postlayout");
+    }
+    function webviewLoaded() {
+        var myData = sinAndCos();
+        Ti.App.fireEvent("fromIndex", {
+            myData: myData
+        });
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     this.__controllerPath = "index";
@@ -27,10 +65,18 @@ function Controller() {
         height: "90%"
     });
     $.__views.index.add($.__views.visualizerWebView);
+    webviewLoaded ? $.__views.visualizerWebView.addEventListener("load", webviewLoaded) : __defers["$.__views.visualizerWebView!load!webviewLoaded"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
+    Ti.App.addEventListener("chartItUp", function() {
+        console.log("listening for charting on nvd3localtrieals index");
+    });
+    Ti.App.addEventListener("fromWebview", function() {
+        console.log("just received word of webivew event");
+    });
     $.index.open();
     __defers["$.__views.index!postlayout!windowPostlayout"] && $.__views.index.addEventListener("postlayout", windowPostlayout);
+    __defers["$.__views.visualizerWebView!load!webviewLoaded"] && $.__views.visualizerWebView.addEventListener("load", webviewLoaded);
     _.extend($, exports);
 }
 

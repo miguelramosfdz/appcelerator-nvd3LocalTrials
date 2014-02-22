@@ -11,76 +11,84 @@
 <body>
 
 <div id="chart">
-	<svg style='height:500px'> </svg>
+	<svg style='height:300px' > </svg>
 </div>
 
 
 <!-- charting code -->
 <script>
-//chart setup and choosing
-nv.addGraph(function() {
-	var chart = nv.models.lineChart()
-		.margin({left:100})
-		.useInteractiveGuideline(true)
-		.transitionDuration(350)
-		.showLegend(true)
-		.showYAxis(true)
-		.showXAxis(true)
-		.tooltips(false)
-		;
-	chart.xAxis // Chart x-axis settings
-		.axisLabel('Time (ms)')
-		.tickFormat(d3.format(',r'));
+	document.write("loaded JS in webview");
 
-	chart.yAxis // chart y-axis settings
-		.axisLabel('Voltage (v)')
-		.tickFormat(d3.format('.02f'));
-
-	// done setting chart up, so let's render it
-	var myData = sinAndCos();
-
-	d3.select('#chart svg') // selct SVG element to render chart in
-		.datum(myData) // populate svg element with chart data
-		.call(chart); // render the cart
-
-	// update chart when window resizes
-	nv.utils.windowResize(function() {
-		chart.update()
+	document.write("chart it up");
+	
+	Ti.App.fireEvent('fromWebview');
+Ti.App.addEventListener('fromIndex', function(e) {
+	//chart setup and choosing
+	nv.addGraph(function() {
+		var chart = nv.models.lineChart()
+			.margin({left:10})
+			.useInteractiveGuideline(true)
+			.transitionDuration(350)
+			.showLegend(true)
+			.showYAxis(true)
+			.showXAxis(true)
+			.tooltips(false)
+			;
+		chart.xAxis // Chart x-axis settings
+			.axisLabel('Time (ms)')
+			.tickFormat(d3.format(',r'));
+	
+		chart.yAxis // chart y-axis settings
+			.axisLabel('Voltage (v)')
+			.tickFormat(d3.format('.02f'));
+	
+		// done setting chart up, so let's render it
+		// var myData = sinAndCos();
+	
+		d3.select('#chart svg') // selct SVG element to render chart in
+			.datum(e.myData) // populate svg element with chart data
+			.call(chart); // render the cart
+	
+		// update chart when window resizes
+		nv.utils.windowResize(function() {
+			chart.update();
+		});
+		return chart;
 	});
-	return chart;
+	
+	//test data generator
+	function sinAndCos() {
+		var sin = [], sin2 = [], cos = [];
+	
+		//data is represented as array of {x, y} pairs
+		for (var i = 0; i < 100; i++) {
+			sin.push({x: i, y: Math.sin(i/10)});
+			sin2.push({x: i, y: Math.sin(i/10) * 0.25 + 0.5});
+			cos.push({x: i, y: .5 * Math.cos(i/10)});
+		}
+	
+		//Line chart data should be sent as an array of series objects
+		// that is, {key: *series name*, color: *hex*, values: *array of values in {x: ... ,y: ... } pairs*}
+		return [
+		{
+			values: sin,
+			key: 'Sine Wave',
+			color: '#D2D9BA'
+		},
+		{
+			values: sin2,
+			key: 'Another sine wave',
+			color: '#95BDA6'
+		}, {
+			values: cos,
+			key: 'Cosine wave',
+			color: '#F5E687'
+		}
+		];
+	};
 });
 
-//test data generator
-function sinAndCos() {
-	var sin = [], sin2 = [], cos = [];
 
-	//data is represented as array of {x, y} pairs
-	for (var i = 0; i < 100; i++) {
-		sin.push({x: i, y: Math.sin(i/10)});
-		sin2.push({x: i, y: Math.sin(i/10) * 0.25 + 0.5});
-		cos.push({x: i, y: .5 * Math.cos(i/10)});
-	}
-
-	//Line chart data should be sent as an array of series objects
-	// that is, {key: *series name*, color: *hex*, values: *array of values in {x: ... ,y: ... } pairs*}
-	return [
-	{
-		values: sin,
-		key: 'Sine Wave',
-		color: '#D2D9BA'
-	},
-	{
-		values: sin2,
-		key: 'Another sine wave',
-		color: '#95BDA6'
-	}, {
-		values: cos,
-		key: 'Cosine wave',
-		color: '#F5E687'
-	}
-	];
-};
 </script>
-
 </body>
 </html>
